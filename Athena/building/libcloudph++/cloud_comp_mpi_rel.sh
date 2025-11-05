@@ -29,5 +29,6 @@ rm -rf /net/people/plgrid/plgpdziekan/code/libcloudphxx/build/
 mkdir /net/people/plgrid/plgpdziekan/code/libcloudphxx/build/
 
 cd ~/code/libcloudphxx/build 
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=mpic++ -DCMAKE_INSTALL_PREFIX=$HOME/builds_with_mpi -DLIBCLOUDPHXX_FORCE_MULTI_CUDA=True -DTHRUST_INCLUDE_DIR=$CUDA_HOME/include/
+# note: Boost.MPI/1.79.0-mpi-thread-multiple doesn't have boost.python (?), hence libcloudph++ Python interface won't compile and we disable it's compilation
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=mpic++ -DCMAKE_INSTALL_PREFIX=$HOME/builds_with_mpi -DLIBCLOUDPHXX_FORCE_MULTI_CUDA=True -DTHRUST_INCLUDE_DIR=$CUDA_HOME/include/ -DLIBCLOUDPHXX_DISABLE_BINDINGS=True
 VERBOSE=1 make -j4 install
