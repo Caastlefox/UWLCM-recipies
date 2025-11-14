@@ -21,7 +21,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=36GB
 
-module load GCC/11.3.0 OpenMPI/4.1.4-mpi-thread-multiple Boost.MPI/1.79.0-mpi-thread-multiple HDF5/1.12.2-threadsafe CMake/3.23.1 Python/3.10.4
+module load GCC/11.3.0 OpenMPI/4.1.4-mpi-thread-multiple Boost.MPI/1.79.0-mpi-thread-multiple HDF5/1.12.2-threadsafe CMake/3.23.1 Python/3.10.4 CUDA/12.2.0
 
 printenv
 
