@@ -1,0 +1,10 @@
+#!/bin/bash
+LOCALRANK=$OMPI_COMM_WORLD_NODE_RANK
+NMAP="mlx5_1,mlx5_1,mlx5_0,mlx5_0,mlx5_3,mlx5_3,mlx5_2,mlx5_2"
+readarray -t NET_MAP <<< "$(tr ',' '\n' <<< $NMAP )"
+MYDEV=${NET_MAP[$LOCALRANK]}
+export CUDA_VISIBLE_DEVICES=$LOCALRANK
+#export UCX_NET_DEVICES=$MYDEV:1
+echo CUDA_VISIBLE_DEVICES  $CUDA_VISIBLE_DEVICES 
+echo UCX_NET_DEVICES $UCX_NET_DEVICES
+exec $*
