@@ -37,7 +37,7 @@
 
 
 #export SLURM_OVERLAP=1 # needed for GPU sharing? dont think so
-module load GCC/11.3.0 OpenMPI/4.1.4-mpi-thread-multiple Boost.MPI/1.79.0-mpi-thread-multiple HDF5/1.12.2-threadsafe CMake/3.23.1 Blitz++/1.0.2 CUDA/12.2.0 GDB
+module load GCC/11.3.0 OpenMPI/4.1.4-mpi-thread-multiple Boost.MPI/1.79.0-mpi-thread-multiple HDF5/1.12.2-threadsafe CMake/3.23.1 Blitz++/1.0.2 GDB
 
 now=`date +"%d_%m_%Y"`; 
 outname_nomicro=${now}_out_UWLCM_moist_thermal_mpi1x8_;
