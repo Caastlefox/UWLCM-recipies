@@ -58,9 +58,9 @@ export UCX_PROTO_INFO=y   # ditto
 #OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK} LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/net/people/plgrid/plgpdziekan/builds_with_mpi/lib/" mpiexec --map-by socket:PE=${SLURM_CPUS_PER_TASK} --report-bindings --output-filename /net/people/plgrid/plgpdziekan/output/moist_thermal/UWLCM_mpi1x8_moist_thermal/ -merge-stderr-to-stdout -x LD_LIBRARY_PATH -x OMP_NUM_THREADS -x outdir=${outdir} \
 
 OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK} LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/net/people/plgrid/plgpdziekan/builds_with_mpi/lib/" mpiexec --map-by numa:PE=${SLURM_CPUS_PER_TASK} --report-bindings --output-filename /net/people/plgrid/plgpdziekan/output/moist_thermal/UWLCM_mpi1x8_moist_thermal/ -merge-stderr-to-stdout -x LD_LIBRARY_PATH -x OMP_NUM_THREADS -x outdir=${outdir} \
--  ../bind_gpu /net/people/plgrid/plgpdziekan/builds_with_mpi/bin/uwlcm \
--               --outdir=${outdir}  --case=moist_thermal --nx=101 --ny=101 --nz=101 --dt=1 \
--        --spinup=0 --nt=600 --micro=lgrngn --sd_conc=128 --backend=CUDA --outfreq=60 \
+  ../bind_gpu /net/people/plgrid/plgpdziekan/builds_with_mpi/bin/uwlcm \
+               --outdir=${outdir}  --case=moist_thermal --nx=101 --ny=101 --nz=101 --dt=0.5 \
+        --spinup=0 --nt=1200 --micro=lgrngn --sd_conc=128 --backend=CUDA --outfreq=120 \
 
 
 # OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK} LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/net/people/plgrid/plgpdziekan/builds_with_mpi/lib/" mpiexec -n ${SLURM_NTASKS} --map-by numa:PE=${SLURM_CPUS_PER_TASK} --report-bindings --output-filename /net/people/plgrid/plgpdziekan/output/moist_thermal/UWLCM_mpi1x8_moist_thermal/ -merge-stderr-to-stdout -x LD_LIBRARY_PATH -x OMP_NUM_THREADS -x outdir=${outdir} \
