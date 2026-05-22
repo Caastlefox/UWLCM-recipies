@@ -1,0 +1,34 @@
+#!/bin/bash -l
+## Nazwa zlecenia
+#SBATCH -J UWLCM_comp_mpi
+## Liczba węzłów
+#SBATCH -N 1
+## Ilość zadań na węzeł
+#SBATCH --ntasks-per-node=1
+## Ilość rdzeni na zadanie
+#SBATCH --cpus-per-task=1
+## Maksymalny czas trwania zlecenia (format HH:MM:SS)
+#SBATCH --time=00:20:00 
+## Nazwa grantu do rozliczenia zużycia zasobów
+#SBATCH -A plghanami-gpu-gh200
+## Specyfikacja partycji
+#SBATCH -p plgrid-gpu-gh200
+## Plik ze standardowym wyjściem
+#SBATCH --output="/net/home/plgrid/"plgUSERNAME"/output/mpdata_comp_mpi.out"
+## Plik ze standardowym wyjściem błędów
+#SBATCH --error="/net/home/plgrid/"plgUSERNAME"/output/mpdata_comp_mpi.err"
+## liczba gpu
+#SBATCH --gres=gpu:1
+#SBATCH --mem=36GB
+ 
+module load GCC/13.2.0 Boost.MPI/1.83.0-threadsafe CUDA/12.8.0 MVAPICH/4.1-threadsafe HDF5/1.14.3-threadsafe CMake/3.27.6 Blitz++/1.0.2
+printenv
+
+rm -rf ~/libs/UWLCM/build/
+mkdir ~/libs/UWLCM/build/
+
+cd ~/libs/UWLCM/build 
+
+# note: Boost.MPI/1.79.0-mpi-thread-multiple doesn't have boost.python (?), hence libcloudph++ Python interface won't compile and we disable it's compilation
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=mpic++ -DCMAKE_INSTALL_PREFIX=$HOME/builds_with_mpi -Dlibmpdata++_DIR=$HOME/builds_with_mpi/share/libmpdata++ -Dlibcloudph++_DIR=$HOME/builds_with_mpi/share/libcloudph++ -DUWLCM_TIMING=1
+VERBOSE=1 make install

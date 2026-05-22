@@ -1,0 +1,31 @@
+#!/bin/bash -l
+## Nazwa zlecenia
+#SBATCH -J mpdata_comp_ompi
+## Liczba węzłów
+#SBATCH -N 1
+## Ilość zadań na węzeł
+#SBATCH --ntasks-per-node=1
+## Ilość rdzeni na zadanie
+#SBATCH --cpus-per-task=1
+## Maksymalny czas trwania zlecenia (format HH:MM:SS)
+#SBATCH --time=00:20:00 
+## Nazwa grantu do rozliczenia zużycia zasobów
+#SBATCH -A plghanami-gpu-gh200
+## Specyfikacja partycji
+#SBATCH -p plgrid-gpu-gh200
+## Plik ze standardowym wyjściem
+#SBATCH --output="/net/home/plgrid/"plgUSERNAME"/output/mpdata_comp_mpi.out"
+## Plik ze standardowym wyjściem błędów
+#SBATCH --error="/net/home/plgrid/"plgUSERNAME"/output/mpdata_comp_mpi.err"
+## liczba gpu
+#SBATCH --gres=gpu:1
+
+rm -rf ~/libs/libmpdataxx/libmpdata++/build/
+mkdir ~/libs/libmpdataxx/libmpdata++/build/
+module purge
+module load GCC/13.2.0 Boost.MPI/1.83.0-threadsafe MVAPICH/4.1-threadsafe HDF5/1.14.3-threadsafe CMake/3.27.6 Blitz++/1.0.2
+
+cd ~/libs/libmpdataxx/libmpdata++/build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=mpic++ -DCMAKE_GNUPLOT_IOSTREAM_INCLUDE_DIR=$HOME/libs/gnuplot-iostream -DCMAKE_INSTALL_PREFIX=$HOME/builds_with_mpi
+
+make install

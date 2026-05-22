@@ -2,6 +2,7 @@ Scripts may contain user-specific file and folder paths, and grant names, that n
 
 Scripts are available for following clusters:
 - Cyfronet Athena (Slurm)
+- Cyfronet Helios (Slurm)
 - RIKEN Fugaku (PJM, Spack)
 
 Model scaling tests:

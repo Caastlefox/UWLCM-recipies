@@ -1,0 +1,62 @@
+#!/bin/bash -l
+## Nazwa zlecenia
+#SBATCH -J UWLCM_mpi1x8_moist_thermal
+## Liczba węzłów
+#SBATCH -N 1
+## Ilość zadań na węzeł
+#SBATCH --ntasks-per-node=4
+## Ilość rdzeni na zadanie
+#SBATCH --cpus-per-task=16
+## Maksymalny czas trwania zlecenia (format HH:MM:SS)
+#SBATCH --time=2:00:00 
+## Nazwa grantu do rozliczenia zużycia zasobów
+#SBATCH -A plghanami-gpu-gh200
+## Specyfikacja partycji
+#SBATCH -p plgrid-gpu-gh200
+## Plik ze standardowym wyjściem
+#SBATCH --output="/net/home/plgrid/"plgUSERNAME"/output/mpdata_comp_mpi.out"
+## Plik ze standardowym wyjściem błędów
+#SBATCH --error="/net/home/plgrid/"plgUSERNAME"/output/mpdata_comp_mpi.err"
+## liczba gpu
+#SBATCH --gpus-per-task=1
+## single GPUS per task (exlusive GPU per task)
+#SBATCH --gpu-bind=single:1
+## RAM jako temp przestrzen dyskowa
+#SBATCH -C memfs
+## request exclusive nodes access. Warning using this setting significantly increases scheduling time. 
+##SBATCH --exclusive
+## request all memory on a node. Warning using this setting significantly increases scheduling time.
+##SBATCH --mem=0
+ 
+module load GCC/13.2.0 Boost.MPI/1.83.0-threadsafe CUDA/12.8.0 MVAPICH/4.1-threadsafe HDF5/1.14.3-threadsafe CMake/3.27.6 Blitz++/1.0.2
+printenv
+
+#export SLURM_OVERLAP=1
+
+now=`date +"%d_%m_%Y"`;
+outname_nomicro=${now}_out_UWLCM_moist_thermal_mpi1x8_;
+outdir_nomicro=~/wyniki/moist_thermal/${outname_nomicro};
+outdir=${outdir_nomicro}out_lgrngn/;
+mkdir -p ${outdir};
+
+#allowing hdf5 to run in both independent and parallel modes 
+export MPICH_MPIIO_HINTS="*:romio_no_indep_rw=0:*:cb_nodes=-1"
+
+export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
+export LD_LIBRARY_PATH=~/builds_with_mpi/lib:${LD_LIBRARY_PATH}
+
+srun \
+     --cpu-bind=cores \
+     --gpu-bind=closest \
+     --export=ALL,OMP_NUM_THREADS,LD_LIBRARY_PATH,MPICH_MPIIO_HINTS \
+	$HOME/builds_with_mpi/bin/uwlcm \
+    --outdir=${outdir} \
+    --case=moist_thermal \
+    --nx=101 --ny=101 --nz=101 \
+    --dt=0.5 \
+    --spinup=0 \
+    --nt=1200 \
+    --micro=lgrngn \
+    --sd_conc=128 \
+    --backend=CUDA \
+    --outfreq=120
